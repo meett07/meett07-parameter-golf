@@ -1,0 +1,22 @@
+Running Python 3.11.10
+Running PyTorch 2.4.1+cu124
+GPU: NVIDIA H100 80GB HBM3
+train_loader:dataset:fineweb10B_sp1024 train_shards:80
+val_loader:shards pattern=./data/datasets/fineweb10B_sp1024/fineweb_val_*.bin tokens:62021632
+model_params:17059912
+attention_mode:gqa num_heads:8 num_kv_heads:4
+tie_embeddings:True embed_lr:0.03 head_lr:0.0 matrix_lr:0.02 scalar_lr:0.02
+train_batch_tokens:524288 train_seq_len:1024 iterations:20000 warmup_steps:20 max_wallclock_seconds:600.000
+step:200/20000 train_loss:2.7017 train_time:92561ms step_avg:462.81ms
+step:400/20000 train_loss:2.3464 train_time:184672ms step_avg:461.68ms
+step:600/20000 train_loss:2.4569 train_time:275596ms step_avg:459.33ms
+step:800/20000 train_loss:2.3036 train_time:368206ms step_avg:460.26ms
+step:1000/20000 train_loss:2.3234 train_time:460243ms step_avg:460.24ms
+step:1200/20000 train_loss:2.2446 train_time:551082ms step_avg:459.23ms
+step:1306/20000 val_loss:2.2434 val_bpb:1.3286 train_time:600274ms step_avg:459.63ms
+stopping_early: wallclock_cap train_time:600274ms step:1306/20000
+peak memory allocated: 13065 MiB reserved: 13228 MiB
+Serialized model int8+zlib: 11865688 bytes (payload:17178912 raw_torch:17223564 payload_ratio:3.91x)
+Total submission size int8+zlib: 11913909 bytes
+final_int8_zlib_roundtrip val_loss:2.2480 val_bpb:1.3314 eval_time:11741ms
+final_int8_zlib_roundtrip_exact val_loss:2.24802363 val_bpb:1.33140622

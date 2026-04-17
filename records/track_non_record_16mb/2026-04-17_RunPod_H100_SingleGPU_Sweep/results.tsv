@@ -1,0 +1,4 @@
+trial	step_stop	pre_quant_val_loss	pre_quant_val_bpb	post_quant_val_loss	post_quant_val_bpb	bytes_model_int8_zlib	bytes_total	peak_mem_mib	train_seq_len	train_batch_tokens	matrix_lr	scalar_lr	tied_embed_lr	muon_momentum	muon_momentum_warmup_steps	muon_momentum_warmup_start	warmdown_iters
+baseline_sp1024_single_h100	1288	2.2535	1.3346	2.25554520	1.33586092	13371020	13419241	13193	1024	524288	0.04	0.04	0.05	0.95	500	0.85	1200
+lower_lr_sp1024_single_h100	1306	2.2434	1.3286	2.24802363	1.33140622	11865688	11913909	13065	1024	524288	0.02	0.02	0.03	0.95	500	0.85	1200
+seq4096_lowerlr_single_h100	1231	2.2720	1.3456	2.29466042	1.35902715	10117065	10165286	10008	4096	393216	0.02	0.02	0.03	0.99	1500	0.92	3000
