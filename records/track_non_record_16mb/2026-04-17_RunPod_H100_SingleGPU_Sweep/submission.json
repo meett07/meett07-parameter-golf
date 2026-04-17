@@ -1,0 +1,18 @@
+{
+  "author": "",
+  "github_id": "meett07",
+  "name": "RunPod H100 Single-GPU Sweep",
+  "blurb": "Initial non-record RunPod participation pass on 1xH100 using the published sp1024 dataset with a baseline run and two low-risk hyperparameter variants. Final metrics are updated after the pod runs complete.",
+  "date": "2026-04-17T00:00:00Z",
+  "track": "non-record-16mb",
+  "val_loss": null,
+  "val_bpb": null,
+  "pre_quant_val_loss": null,
+  "pre_quant_val_bpb": null,
+  "step_stop": null,
+  "wallclock_seconds": 600,
+  "bytes_total": null,
+  "bytes_model_int8_zlib": null,
+  "bytes_code": null,
+  "gpu": "1xH100 80GB HBM3"
+}

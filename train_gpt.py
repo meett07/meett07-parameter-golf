@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import copy
 import glob
+import inspect
 import io
 import math
 import os
@@ -85,6 +86,16 @@ class Hyperparameters:
     beta2 = float(os.environ.get("BETA2", 0.95))
     adam_eps = float(os.environ.get("ADAM_EPS", 1e-8))
     grad_clip_norm = float(os.environ.get("GRAD_CLIP_NORM", 0.0))
+
+
+def _sdpa_supports_enable_gqa() -> bool:
+    try:
+        return "enable_gqa" in inspect.signature(F.scaled_dot_product_attention).parameters
+    except (TypeError, ValueError):
+        return False
+
+
+SDPA_SUPPORTS_ENABLE_GQA = _sdpa_supports_enable_gqa()
 
 # -----------------------------
 # MUON OPTIMIZER 
@@ -591,14 +602,14 @@ class CausalSelfAttention(nn.Module):
         q = apply_rotary_emb(q, cos, sin)
         k = apply_rotary_emb(k, cos, sin)
         q = q * self.q_gain.to(dtype=q.dtype)[None, :, None, None]
-        y = F.scaled_dot_product_attention(
-            q,
-            k,
-            v,
-            attn_mask=None,
-            is_causal=True,
-            enable_gqa=(self.num_kv_heads != self.num_heads),
-        )
+        if self.num_kv_heads != self.num_heads and not SDPA_SUPPORTS_ENABLE_GQA:
+            repeat = self.num_heads // self.num_kv_heads
+            k = k.repeat_interleave(repeat, dim=1)
+            v = v.repeat_interleave(repeat, dim=1)
+        sdpa_kwargs = dict(attn_mask=None, is_causal=True)
+        if SDPA_SUPPORTS_ENABLE_GQA:
+            sdpa_kwargs["enable_gqa"] = self.num_kv_heads != self.num_heads
+        y = F.scaled_dot_product_attention(q, k, v, **sdpa_kwargs)
         y = y.transpose(1, 2).contiguous().reshape(bsz, seqlen, dim)
         return self.proj(y)
 
